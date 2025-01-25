@@ -15,27 +15,24 @@ class DatasetLoader(Dataset):
 
     def preprocess_image(self, image_path):
         full_path = os.path.join(self.current_dir, 'datasets_cutoff', image_path)
-        image = tiff.imread(full_path)  # 使用tifffile读取图像
-        # 确保图像为 float32 类型，同时归一化到 0-1 范围
+        image = tiff.imread(full_path)  
         image = image.astype(np.float32) / 65535.0
 
-        # 重排维度以适应 PyTorch：从 (H, W, C) 到 (C, H, W)
         if image.ndim == 3 and image.shape[2] == 3:
             image = np.transpose(image, (2, 0, 1))
         
-        # 创建Tensor
+  
         image = torch.from_numpy(image)
-        
-        #应用transforms，确保所有操作都在PyTorch上进行
+    
         transform = transforms.Compose([
-            transforms.Resize((256, 256)),  # 调整图像大小
-            #transforms.RandomHorizontalFlip(0.5),#水平翻转
-            #transforms.RandomVerticalFlip(0.5),  # 垂直翻转
-            #transforms.RandomRotation(degrees=15),  # 随机旋转
-            #transforms.ColorJitter(brightness=0.2),  # 亮度调整
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])  # 归一化
+            transforms.Resize((256, 256)),  
+            transforms.RandomHorizontalFlip(0.5),
+            transforms.RandomVerticalFlip(0.5),  
+            transforms.RandomRotation(degrees=15),  
+            transforms.ColorJitter(brightness=0.2),  
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]) 
         ])
-        image = transform(image)  # 应用转换
+        image = transform(image)  
         
         return image
     
