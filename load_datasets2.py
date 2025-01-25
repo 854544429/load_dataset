@@ -14,7 +14,7 @@ class DatasetLoader(Dataset):
         self.current_dir = os.path.dirname(os.path.abspath(__file__))
 
     def preprocess_image(self, image_path):
-        full_path = os.path.join(self.current_dir, 'datasets_cutoff', image_path)
+        full_path = os.path.join(self.current_dir, 'datasets', image_path)
         image = tiff.imread(full_path)  
         image = image.astype(np.float32) / 65535.0
 
